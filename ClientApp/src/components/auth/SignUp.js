@@ -38,11 +38,16 @@ export class SignUp extends React.Component {
                 RepeatedPassword: this.state.RepeatedPassword
             }),
             headers: {"Content-Type": "application/json"}
-        }).then((res) => res.json())
-            .then((result) => {
-                alert(result.error_description)
-                this.setState({nameError: result.error_description})
-            })
+        }).then((res) => {
+                if (res.status === 200) {
+                    window.location.replace('/email');
+                }
+                return res.json()
+            }
+        ).then((result) => {
+            alert(result.error_description)
+            this.setState({nameError: result.error_description})
+        })
     }
 
     handlePasswordClick(event) {
@@ -84,7 +89,7 @@ export class SignUp extends React.Component {
                         <div className="input-group mb-3">
                             <div className="input-group-prepend">
                                 <span role="button" className="input-group-text" id="password-addon"
-                                    onClick={this.handlePasswordClick}>
+                                      onClick={this.handlePasswordClick}>
                                     <p className="m-0">
                                         <FontAwesomeIcon icon={this.state.showPassword ? faEyeSlash : faEye}/>
                                     </p>
@@ -99,7 +104,7 @@ export class SignUp extends React.Component {
                         <div className="input-group mb-3">
                             <div className="input-group-prepend">
                                 <span role="button" className="input-group-text" id="repeated-password-addon"
-                                    onClick={this.handlePasswordClick}>
+                                      onClick={this.handlePasswordClick}>
                                     <p className="m-0">
                                         <FontAwesomeIcon icon={this.state.showPassword ? faEyeSlash : faEye}/>
                                     </p>

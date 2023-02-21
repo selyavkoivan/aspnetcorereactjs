@@ -38,7 +38,6 @@ public class AuthController : ControllerBase
     [HttpPost("signup")]
     public async Task<IActionResult> SignUp(UserDto userDto)
     {
-        var errors = new ArrayList();
         try
         {
             var user = new User(userDto);
@@ -46,21 +45,19 @@ public class AuthController : ControllerBase
             if (answer.Succeeded)
             {
                 SendEmail(user);
-                return new RedirectResult("../email");
+                return Ok();
             }
 
-            errors.AddRange(MakeMistakeText(answer));
+            return BadRequest(MakeMistakeText(answer)); 
         }
         catch (ArgumentNullException)
         {
-            errors.Add(new
+            return BadRequest(new
             {
                 error = "repeat password",
                 error_description = "Please repeat password"
             });
         }
-
-        return BadRequest(errors);
     }
     
     public async void SendEmail(User user)
@@ -93,36 +90,36 @@ public class AuthController : ControllerBase
         }
     }
     
-    private ArrayList MakeMistakeText(IdentityResult answer)
+    private object MakeMistakeText(IdentityResult answer)
     {
-        var errors = new ArrayList();
+        object error = new ();
         if (answer.Errors.Any(e => e.Code.ToLower().Contains("username")))
         {
-            errors.Add(new
+            error = new
             {
                 error = "username",
                 error_description = "This username is taken"
-            });
+            };
         }
 
         if (answer.Errors.Any(e => e.Code.ToLower().Contains("email")))
         {
-            errors.Add(new
+            error = new
             {
                 error = "email",
                 error_description = "This email is taken"
-            });
+            };
         }
 
         if (answer.Errors.Any(e => e.Code.ToLower().Contains("password")))
         {
-            errors.Add(new
+            error = new
             {
                 error = "password",
                 error_description = "Password must have at least one non alphanumeric character and one uppercase."
-            });
+            };
         }
 
-        return errors;
+        return error;
     }
 }

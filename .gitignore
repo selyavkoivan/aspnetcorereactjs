@@ -232,4 +232,4 @@ _Pvt_Extensions
 .fake/
 
 .idea
-appsettings.json
+.\appsettings.json

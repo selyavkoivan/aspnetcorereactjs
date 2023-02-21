@@ -46,7 +46,7 @@ export class Email extends React.Component {
                 <div className="row justify-content-center align-items-center">
                     <div className="col-6">
                         <div className="m-5 p-5 text-center">
-                            <h1><FontAwesomeIcon icon={faEnvelope}/></h1>
+                            <h1 className="display-1"><FontAwesomeIcon icon={faEnvelope}/></h1>
                             <p>Проверьте свою почту, там письмо))</p>
                         </div>
                         
