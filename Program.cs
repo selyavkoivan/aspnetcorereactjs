@@ -1,9 +1,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using mIndeleev.Context;
+using mIndeleev.Models.Email;
 using mIndeleev.Models.User;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var emailConfig = builder.Configuration
+    .GetSection("EmailConfiguration")
+    .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+
 
 builder.Services.AddControllersWithViews();
 
