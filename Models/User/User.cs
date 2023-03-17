@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace mIndeleev.Models.User;
-
+namespace DistanceLearningSystem.Models.User
+{
     public class User: IdentityUser
     {
         public User(UserDto.UserDto userDto)
@@ -20,4 +20,5 @@ namespace mIndeleev.Models.User;
         
         //public bool IsUserInfo => UserInfo is not null;
     }
+}
 

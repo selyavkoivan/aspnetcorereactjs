@@ -1,9 +1,8 @@
-﻿using clotheshop.Models.Email;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MimeKit;
-using mIndeleev.Models.Email;
+using DistanceLearningSystem.Models.Email;
 
-namespace mIndeleev.Controllers.Services.EmailServices;
+namespace DistanceLearningSystem.Controllers.Services.EmailServices;
 
 public class EmailSenderImpl : IEmailSender
 {

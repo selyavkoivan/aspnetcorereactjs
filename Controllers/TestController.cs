@@ -2,37 +2,38 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using mIndeleev.Context;
-using mIndeleev.Models;
-using mIndeleev.Models.User;
-using mIndeleev.Models.User.UserDto;
+using DistanceLearningSystem.Context;
+using DistanceLearningSystem.Models;
+using DistanceLearningSystem.Models.User;
+using DistanceLearningSystem.Models.User.UserDto;
 
-namespace mIndeleev.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class TestController : ControllerBase
+namespace DistanceLearningSystem.Controllers
 {
-    private readonly ApplicationContext _context;
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-
-    public TestController(ApplicationContext context, UserManager<User> userManager,
-        SignInManager<User> signInManager)
+    [ApiController]
+    [Route("[controller]")]
+    public class TestController : ControllerBase
     {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _context = context;
-    }
+        private readonly ApplicationContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-    [HttpPost("signup")]
-    public IActionResult SignUp(UserDto userDto)
-    {
-        
-        return BadRequest(new
+        public TestController(ApplicationContext context, UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
-            error = "email", 
-            error_description = "The username or password is invalid."
-        });
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _context = context;
+        }
+
+        [HttpPost("signup")]
+        public IActionResult SignUp(UserDto userDto)
+        {
+        
+            return BadRequest(new
+            {
+                error = "email", 
+                error_description = "The username or password is invalid."
+            });
+        }
     }
 }

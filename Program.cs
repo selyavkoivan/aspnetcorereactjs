@@ -1,8 +1,8 @@
+using DistanceLearningSystem.Context;
+using DistanceLearningSystem.Models.Email;
+using DistanceLearningSystem.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using mIndeleev.Context;
-using mIndeleev.Models.Email;
-using mIndeleev.Models.User;
 
 var builder = WebApplication.CreateBuilder(args);
 

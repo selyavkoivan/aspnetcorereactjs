@@ -1,6 +1,6 @@
-﻿using clotheshop.Models.Email;
+﻿using DistanceLearningSystem.Models.Email;
 
-namespace mIndeleev.Controllers.Services.EmailServices;
+namespace DistanceLearningSystem.Controllers.Services.EmailServices;
 
 public interface IEmailSender
 {
