@@ -4,6 +4,6 @@ public class Group
 {
     public int GroupId { get; set; }
     public int GroupNumber { get; set; }
-    public Speciality Speciality { get; set; }
-    public List<Student> Students { get; set; }
+    public virtual Speciality Speciality { get; set; }
+    public virtual List<Student> Students { get; set; }
 }

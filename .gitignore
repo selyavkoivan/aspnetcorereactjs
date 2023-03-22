@@ -231,5 +231,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 
+Models/User/ConstUserData.cs
 /.idea
 /appsettings.json

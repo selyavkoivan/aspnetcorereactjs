@@ -3,5 +3,5 @@
 public class Student: User.User
 {
     public int StudentId { get; set; }
-    public Group Group { get; set; }
+    public virtual Group Group { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿using DistanceLearningSystem.Models.User;
+﻿using DistanceLearningSystem.Models.University;
+using DistanceLearningSystem.Models.User;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +9,13 @@ namespace DistanceLearningSystem.Context
     public sealed class ApplicationContext : IdentityDbContext<User>
     {
         public override DbSet<User> Users => Set<User>();
+        public DbSet<Course> Courses => Set<Course>();
+        public DbSet<Department> Departments => Set<Department>();
+        public DbSet<Faculty> Faculties => Set<Faculty>();
+        public DbSet<Group> Groups => Set<Group>();
+        public DbSet<Speciality> Specialities => Set<Speciality>();
+        public DbSet<Student> Students => Set<Student>();
+        public DbSet<Teacher> Teachers => Set<Teacher>();
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options) => Database.EnsureCreated();
@@ -18,6 +27,7 @@ namespace DistanceLearningSystem.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+                
             /*builder.Entity<User>().HasOne(u => u.UserInfo)
                 .WithOne(ui => ui.User)
                 .HasForeignKey<User>(u => u.userInfoId)
@@ -26,6 +36,7 @@ namespace DistanceLearningSystem.Context
                 uib.Property(ui => ui.AvatarUrl)
                     .HasDefaultValue(
                         "https://res.cloudinary.com/fanfictionteamoff/image/upload/v1669894168/ekrama/%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_2022-12-01_142927792_vx67r0.png"));
-        */}
+        */
+        }
     }
 }

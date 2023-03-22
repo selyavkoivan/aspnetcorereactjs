@@ -29,6 +29,7 @@ export class SignUp extends React.Component {
     }
 
     handleSubmit(event) {
+        
         fetch('auth/signup', {
             method: 'POST',
             body: JSON.stringify({

@@ -22,7 +22,7 @@ export class SignIn extends React.Component {
 
     handleSubmit(event) {
 
-        fetch('weatherforecast/form', {
+        fetch('distancelearningsystem/form', {
             method: 'POST',
             body: JSON.stringify({
                 Username: this.state.Username,

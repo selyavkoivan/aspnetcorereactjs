@@ -3,6 +3,6 @@
 public class Teacher: User.User
 {
    public int TeacherId { get; set; } 
-   public Department Department { get; set; }
-   public List<Course> Courses { get; set; }
+   public virtual Department Department { get; set; }
+   public virtual List<Course> Courses { get; set; }
 }

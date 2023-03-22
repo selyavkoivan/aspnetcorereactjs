@@ -20,9 +20,9 @@ builder.Services.AddIdentity<User, IdentityRole>(o =>
     {
         o.SignIn.RequireConfirmedPhoneNumber = false;
         o.SignIn.RequireConfirmedEmail = true;
-    })
-    .AddDefaultTokenProviders()
-    .AddEntityFrameworkStores<ApplicationContext>();
+    }).AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
