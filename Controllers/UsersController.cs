@@ -4,36 +4,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using DistanceLearningSystem.Context;
 using DistanceLearningSystem.Models;
+using DistanceLearningSystem.Models.Chat.openai;
 using DistanceLearningSystem.Models.User;
 using DistanceLearningSystem.Models.User.UserDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace DistanceLearningSystem.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class TestController : ControllerBase
+    [Route("users")]
+    public class UsersController : ControllerBase
     {
         private readonly ApplicationContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
 
-        public TestController(ApplicationContext context, UserManager<User> userManager,
-            SignInManager<User> signInManager)
+        public UsersController(ApplicationContext context, UserManager<User> userManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _context = context;
         }
 
-        [HttpPost("signup")]
-        public IActionResult SignUp(UserDto userDto)
-        {
+        [HttpGet("all")]
+        public async Task<IActionResult> GetUsers() => Ok(await _userManager.Users.ToListAsync());
         
-            return BadRequest(new
-            {
-                error = "email", 
-                error_description = "The username or password is invalid."
-            });
-        }
+        [HttpGet("openai")]
+        public async Task<string> GetOpenAiAnswer(string prompt) => await GPT3Api.GenerateText(prompt);
     }
 }

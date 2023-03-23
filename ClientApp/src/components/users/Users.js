@@ -2,12 +2,25 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 
-export class SignIn extends React.Component {
+export class Users extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {}
 
+        fetch('distancelearningsystem/form', {
+            method: 'POST',
+            body: JSON.stringify({
+                Username: this.state.Username,
+                Password: this.state.Password
+            }),
+            headers: {"Content-Type": "application/json"}
+        }).then((res) => res.json())
+            .then((result) => {
+                alert(result.error_description)
+                this.setState({nameError: result.error_description})
+            })
+        
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handlePasswordClick = this.handlePasswordClick.bind(this);
     }
@@ -22,21 +35,14 @@ export class SignIn extends React.Component {
 
     handleSubmit(event) {
 
-        fetch('auth/signin', {
+        fetch('distancelearningsystem/form', {
             method: 'POST',
             body: JSON.stringify({
                 Username: this.state.Username,
-                SignInPassword: this.state.Password
+                Password: this.state.Password
             }),
             headers: {"Content-Type": "application/json"}
-        }).then((res) => {
-            if (res.status === 200) {
-                fetch('users/', {
-                    method: 'GET',
-                })
-            }
-            return res.json()
-        })
+        }).then((res) => res.json())
             .then((result) => {
                 alert(result.error_description)
                 this.setState({nameError: result.error_description})
@@ -53,7 +59,7 @@ export class SignIn extends React.Component {
                 <div className="row justify-content-center align-items-center">
                     <div className="col-6">
                         <div className="m-5 text-center">
-                            <h1>Вход</h1>
+                            <h1>Вхоqweд</h1>
                         </div>
                         <div className="input-group mb-3">
                             <div className="input-group-prepend">

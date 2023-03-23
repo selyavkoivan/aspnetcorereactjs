@@ -1,6 +1,7 @@
 import { SignIn } from "./components/auth/SignIn";
 import { SignUp } from "./components/auth/SignUp";
 import { Email } from "./components/auth/Email";
+import { Users } from "./components/users/Users";
 
 const AppRoutes = [
   {
@@ -22,6 +23,10 @@ const AppRoutes = [
   {
     path: '/signup',
     element: <SignUp />
+  },
+  {
+    path: '/users',
+    element: <Users />
   }
 ];
 

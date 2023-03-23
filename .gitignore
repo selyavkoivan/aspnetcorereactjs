@@ -232,5 +232,6 @@ _Pvt_Extensions
 .fake/
 
 Models/User/ConstUserData.cs
+Models/Chat/openai/OpenAIApiKey.cs
 /.idea
 /appsettings.json
