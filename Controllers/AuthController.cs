@@ -11,7 +11,6 @@ using Microsoft.Extensions.Localization;
 using DistanceLearningSystem.Context;
 using DistanceLearningSystem.Controllers.Services.EmailServices;
 using DistanceLearningSystem.Models.User;
-using DistanceLearningSystem.Models.User.UserDto;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DistanceLearningSystem.Controllers

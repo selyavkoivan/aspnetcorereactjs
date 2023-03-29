@@ -11,24 +11,19 @@ using Microsoft.EntityFrameworkCore;
 namespace DistanceLearningSystem.Controllers
 {
     [ApiController]
-    [Route("users")]
-    public class UsersController : ControllerBase
+    [Route("chat")]
+    public class ChatController : ControllerBase
     {
         private readonly ApplicationContext _context;
         private readonly UserManager<User> _userManager;
 
-        public UsersController(ApplicationContext context, UserManager<User> userManager)
+        public ChatController(ApplicationContext context, UserManager<User> userManager)
         {
             _userManager = userManager;
             _context = context;
         }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> GetUsers() => Ok(await _userManager.Users.ToListAsync());
-
-        [HttpGet]
-        [Route("profile/{userName}")]
-        public async Task<IActionResult> FindUser(string userName) =>
-            Ok(await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName));
+        
+        [HttpGet("openai")]
+        public async Task<string> GetOpenAiAnswer(string prompt) => await GPT3Api.GenerateText(prompt);
     }
 }

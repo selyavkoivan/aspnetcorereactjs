@@ -2,6 +2,7 @@ import { SignIn } from "./components/auth/SignIn";
 import { SignUp } from "./components/auth/SignUp";
 import { Email } from "./components/auth/Email";
 import { Users } from "./components/users/Users";
+import { Profile } from "./components/users/user/Profile";
 
 const AppRoutes = [
   {
@@ -25,8 +26,8 @@ const AppRoutes = [
     element: <SignUp />
   },
   {
-    path: '/users',
-    element: <Users />
+    path: '/profile/*',
+    element: <Profile />
   }
 ];
 

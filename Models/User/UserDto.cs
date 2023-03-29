@@ -1,11 +1,15 @@
-﻿namespace DistanceLearningSystem.Models.User.UserDto
+﻿namespace DistanceLearningSystem.Models.User
 {
     public class UserDto
     {
         public string? Email { get; set; }
         public string? Username { get; set; }
 
-
+        
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
+        public string? Patronymic { get; set; }
+        
         private string? PasswordField;
         public string? Password
         {

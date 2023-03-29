@@ -11,12 +11,12 @@ public static class GPT3Api
 {
     public static async Task<string> GenerateText(string prompt)
     {
-        var gpt3 = new OpenAIService(new OpenAiOptions()
+        var gpt3 = new OpenAIService(new OpenAiOptions
         {
             ApiKey = OpenAIApiKey.ApiKey
         });
 
-        var completionResult = await gpt3.Completions.CreateCompletion(new CompletionCreateRequest()
+        var completionResult = await gpt3.Completions.CreateCompletion(new CompletionCreateRequest
         {
             Prompt = prompt,
             Model = OpenAIModels.TextDavinciV3,
@@ -26,7 +26,7 @@ public static class GPT3Api
 
         if (completionResult.Successful)
         {
-            return completionResult.Choices.Aggregate(string.Empty, (current, choice) => current + choice.Text).Trim();
+            return completionResult.Choices.FirstOrDefault()!.Text.Trim();
         }
 
         throw new Exception("Unknown Error");
