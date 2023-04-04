@@ -28,60 +28,57 @@ export class Profile extends React.Component {
 
     render() {
         const {user, isUser, isLoaded} = this.state;
-        if (!isLoaded) return (<h1>loading</h1>)
-        else {
-            if (isUser) {
-                return (
-                    <Container className="mt-5">
-                        <Row>
-                            <Col md={3}>
-                                <CardImg src="https://avatars.githubusercontent.com/u/12345?v=4"
-                                         className="rounded-circle"
-                                         fluid/>
-                                <h1 className="mt-3">Селявко Иван</h1>
-                                <h6 className="text-muted">{user.email}</h6>
-                                <hr/>
-                                <p className="text-muted">ИЭФ ИСиТ(Э) 972304</p>
-                                <hr/>
-                                <Button variant="primary"><FontAwesomeIcon icon={faPenToSquare}/> Изменить</Button>
-                            </Col>
-                            <Col md={9}>
-                                <h2>Мои курсы</h2>
-                                <hr/>
-                                <Row>
-                                    <Col md={6} className="mb-3">
-                                        <div className="form-control">
-                                            <h3>СТОЭИ ч. 2</h3>
-                                            <p>Современные технологии обработки экономической информации.</p>
-                                            <Badge>Данные</Badge>{' '}
-                                            <Badge>Программирование</Badge>{' '}
-                                            <Badge>1с</Badge>{' '}
-                                            <Badge>Учет</Badge>{' '}
-                                        </div>
-                                    </Col>
-                                    <Col md={6} className="mb-3">
-                                        <div className="form-control">
-                                            <h3>МППиИУ</h3>
-                                            <p>Маркетинг программных продуктов и ИТ-услуг</p>
-                                            <Badge>Маркетинг</Badge>{' '}
-                                            <Badge>Экономика</Badge>{' '}
-                                            <Badge>IT</Badge>{' '}
-                                        </div>
-                                    </Col>
-                                    <Col md={6} className="mb-3">
-                                        <div className="form-control">
-                                            <h3>Маркетинг</h3>
-                                            <p>Маркетинг</p>
-                                            <Badge>Маркетинг</Badge>{' '}
-                                            <Badge>Экономика</Badge>{' '}
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                );
-            } else return (<h1>((((((((((((</h1>)
+        if (isLoaded && isUser) {
+            return (
+                <Container className="mt-5">
+                    <Row>
+                        <Col md={3}>
+                            <CardImg src="https://avatars.githubusercontent.com/u/12345?v=4"
+                                     className="rounded-circle"
+                                     fluid/>
+                            <h1 className="mt-3">Селявко Иван</h1>
+                            <h6 className="text-muted">{user.email}</h6>
+                            <hr/>
+                            <p className="text-muted">ИЭФ ИСиТ(Э) 972304</p>
+                            <hr/>
+                            <Button variant="primary"><FontAwesomeIcon icon={faPenToSquare}/> Изменить</Button>
+                        </Col>
+                        <Col md={9}>
+                            <h2>Мои курсы</h2>
+                            <hr/>
+                            <Row>
+                                <Col md={6} className="mb-3">
+                                    <div className="form-control">
+                                        <h3>СТОЭИ ч. 2</h3>
+                                        <p>Современные технологии обработки экономической информации.</p>
+                                        <Badge>Данные</Badge>{' '}
+                                        <Badge>Программирование</Badge>{' '}
+                                        <Badge>1с</Badge>{' '}
+                                        <Badge>Учет</Badge>{' '}
+                                    </div>
+                                </Col>
+                                <Col md={6} className="mb-3">
+                                    <div className="form-control">
+                                        <h3>МППиИУ</h3>
+                                        <p>Маркетинг программных продуктов и ИТ-услуг</p>
+                                        <Badge>Маркетинг</Badge>{' '}
+                                        <Badge>Экономика</Badge>{' '}
+                                        <Badge>IT</Badge>{' '}
+                                    </div>
+                                </Col>
+                                <Col md={6} className="mb-3">
+                                    <div className="form-control">
+                                        <h3>Маркетинг</h3>
+                                        <p>Маркетинг</p>
+                                        <Badge>Маркетинг</Badge>{' '}
+                                        <Badge>Экономика</Badge>{' '}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Container>
+            );
         }
     }
 }

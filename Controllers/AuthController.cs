@@ -1,17 +1,9 @@
-﻿using System.Collections;
-using System.Text.Json;
-using DistanceLearningSystem.Models.Email;
+﻿using DistanceLearningSystem.Models.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.Localization;
 using DistanceLearningSystem.Context;
 using DistanceLearningSystem.Controllers.Services.EmailServices;
 using DistanceLearningSystem.Models.User;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DistanceLearningSystem.Controllers
 {

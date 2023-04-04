@@ -1,4 +1,5 @@
-﻿using DistanceLearningSystem.Models.University;
+﻿using DistanceLearningSystem.Models.DistanceLearning;
+using DistanceLearningSystem.Models.DistanceLearning.UserManagement;
 using DistanceLearningSystem.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -9,13 +10,8 @@ namespace DistanceLearningSystem.Context
     public sealed class ApplicationContext : IdentityDbContext<User>
     {
         public override DbSet<User> Users => Set<User>();
-        public DbSet<Course> Courses => Set<Course>();
-        public DbSet<Department> Departments => Set<Department>();
-        public DbSet<Faculty> Faculties => Set<Faculty>();
-        public DbSet<Group> Groups => Set<Group>();
-        public DbSet<Speciality> Specialities => Set<Speciality>();
         public DbSet<Student> Students => Set<Student>();
-        public DbSet<Teacher> Teachers => Set<Teacher>();
+        public DbSet<Course> Courses => Set<Course>();
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options) => Database.EnsureCreated();
