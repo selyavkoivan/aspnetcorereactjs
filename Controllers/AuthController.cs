@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using DistanceLearningSystem.Context;
 using DistanceLearningSystem.Controllers.Services.EmailServices;
-using DistanceLearningSystem.Models.User;
+using DistanceLearningSystem.Models.DistanceLearning;
+using DistanceLearningSystem.Models.DistanceLearning.UserManagement;
+using Microsoft.EntityFrameworkCore;
 
 namespace DistanceLearningSystem.Controllers
 {
     [ApiController]
-    [Route("auth")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly ApplicationContext _context;
@@ -27,12 +29,12 @@ namespace DistanceLearningSystem.Controllers
             _context = context;
             _emailConfiguration = emailConfiguration;
         }
-        
-        [HttpGet("issignin")]
-        public bool IsSignIn() => _signInManager.IsSignedIn(User);
-        
-        [HttpPost("signout")]
-        public async Task<IActionResult> SignOut()
+
+        [HttpGet("isLogin")]
+        public IActionResult IsSignIn() => Ok(_signInManager.IsSignedIn(User));
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return Ok();
@@ -41,18 +43,24 @@ namespace DistanceLearningSystem.Controllers
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp(UserDto userDto)
         {
-            try
+            _context.Students.AddAsync(new Student());
+            _context.Tags.Remove(new Tag());
+           var a = _context.Courses.Include(cr => cr.Students)
+               .Where(cr => cr.CourseId == 2).ToList();
+
+           
+           try
             {
                 var user = new User(userDto);
                 var answer = await _userManager.CreateAsync(user, userDto.Password!);
-                
+
                 if (answer.Succeeded)
                 {
                     try
                     {
                         await AddToRole(user);
-                        SendEmail(user);  
-                        
+                        SendEmail(user);
+
                         return Ok();
                     }
                     catch
@@ -66,7 +74,7 @@ namespace DistanceLearningSystem.Controllers
                     }
                 }
 
-                return BadRequest(MakeMistakeText(answer)); 
+                return BadRequest(MakeMistakeText(answer));
             }
             catch (ArgumentNullException)
             {
@@ -77,7 +85,7 @@ namespace DistanceLearningSystem.Controllers
                 });
             }
         }
-        
+
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn(UserDto userDto)
         {
@@ -112,15 +120,15 @@ namespace DistanceLearningSystem.Controllers
         private string GetRole(User user) => user.UserName == ConstUserData.MainAdminUserName
             ? ConstUserData.MainAdminRole
             : ConstUserData.UserRole;
-        
+
         private async Task CreateRoleIfNotExist(string role) => await _roleManager.CreateAsync(new IdentityRole(role));
-        
+
         private async void SendEmail(User user)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var callbackUrl = Url.Action(
                 "ConfirmEmail",
-                "Auth",
+                "auth",
                 new {userId = user.Id, code},
                 protocol: HttpContext.Request.Scheme);
             //var text = await MakeConfirmEmailBody(callbackUrl);
@@ -128,7 +136,7 @@ namespace DistanceLearningSystem.Controllers
             var message = new Message(new[] {user.Email}, "d", callbackUrl);
             new EmailSenderImpl(_emailConfiguration).SendEmail(message);
         }
-        
+
         [HttpGet("signin")]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
@@ -147,7 +155,7 @@ namespace DistanceLearningSystem.Controllers
 
         private object MakeMistakeText(IdentityResult answer)
         {
-            object error = new ();
+            object error = new();
             if (answer.Errors.Any(e => e.Code.ToLower().Contains("username")))
             {
                 error = new

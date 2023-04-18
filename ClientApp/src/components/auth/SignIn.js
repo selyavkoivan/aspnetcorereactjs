@@ -22,7 +22,7 @@ export class SignIn extends React.Component {
 
     handleSubmit(event) {
 
-        fetch('auth/signin', {
+        fetch('/api/auth/signin', {
             method: 'POST',
             body: JSON.stringify({
                 Username: this.state.Username,
@@ -31,9 +31,7 @@ export class SignIn extends React.Component {
             headers: {"Content-Type": "application/json"}
         }).then((res) => {
             if (res.status === 200) {
-                fetch('users/', {
-                    method: 'GET',
-                })
+                window.location.replace(`/profile/${this.state.Username}`)
             }
             return res.json()
         })

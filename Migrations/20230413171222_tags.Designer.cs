@@ -4,6 +4,7 @@ using DistanceLearningSystem.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DistanceLearningSystem.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230413171222_tags")]
+    partial class tags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace DistanceLearningSystem.Migrations
 
                     b.HasIndex("StudentsStudentId");
 
-                    b.ToTable("CourseStudent", (string)null);
+                    b.ToTable("CourseStudent");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Course", b =>
@@ -55,7 +58,7 @@ namespace DistanceLearningSystem.Migrations
 
                     b.HasKey("CourseId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Tag", b =>
@@ -77,7 +80,7 @@ namespace DistanceLearningSystem.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Student", b =>
@@ -96,7 +99,7 @@ namespace DistanceLearningSystem.Migrations
 
                     b.HasIndex("StudentInfoId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.UserManagement.User", b =>

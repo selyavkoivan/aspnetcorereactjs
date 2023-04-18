@@ -1,8 +1,9 @@
 using DistanceLearningSystem.Context;
+using DistanceLearningSystem.Models.DistanceLearning.UserManagement;
 using DistanceLearningSystem.Models.Email;
-using DistanceLearningSystem.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,6 @@ builder.Services.AddSingleton(emailConfig);
 
 
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<User, IdentityRole>(o =>
@@ -27,6 +27,12 @@ builder.Services.AddIdentity<User, IdentityRole>(o =>
     .AddEntityFrameworkStores<ApplicationContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    c.EnableAnnotations();
+});
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -38,6 +44,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    c.RoutePrefix = "api-docs";
+});
+
+app.UseAuthorization(); 
 
 app.MapControllerRoute(
     name: "default",

@@ -1,35 +1,35 @@
-﻿namespace DistanceLearningSystem.Models.User
+﻿namespace DistanceLearningSystem.Models.DistanceLearning.UserManagement;
+
+public class UserDto
 {
-    public class UserDto
+    public string? Email { get; set; }
+    public string? Username { get; set; }
+
+    public string? Name { get; set; }
+    public string? Surname { get; set; }
+    public string? Patronymic { get; set; }
+
+    private string? PasswordField;
+
+    public string? Password
     {
-        public string? Email { get; set; }
-        public string? Username { get; set; }
-
-        
-        public string? Name { get; set; }
-        public string? Surname { get; set; }
-        public string? Patronymic { get; set; }
-        
-        private string? PasswordField;
-        public string? Password
+        get
         {
-            get {
-                try
-                {
-                    return PasswordField!.Equals(RepeatedPassword) ? PasswordField : null;
-                }
-                catch (NullReferenceException)
-                {
-                    return string.Empty;
-                }
+            try
+            {
+                return PasswordField!.Equals(RepeatedPassword) ? PasswordField : null;
             }
-            set => PasswordField = value;
+            catch (NullReferenceException)
+            {
+                return string.Empty;
+            }
         }
-    
-        public string? RepeatedPassword { get; set; }
-
-        public string? SignInPassword { get; set; }
-
-        public bool RememberMe { get; set; } = false;
+        set => PasswordField = value;
     }
+
+    public string? RepeatedPassword { get; set; }
+
+    public string? SignInPassword { get; set; }
+
+    public bool RememberMe { get; set; } = false;
 }

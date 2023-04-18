@@ -1,8 +1,9 @@
 ﻿namespace DistanceLearningSystem.Models.DistanceLearning.UserManagement;
 
-public class Student: User.User
+public class Student
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public virtual List<Course> Courses { get; set; }
+    public int StudentId { get; set; }
+    public virtual User StudentInfo { get; set; }
+    public string StudentInfoId { get; set; }
+    public virtual List<Course>? Courses { get; set; }
 }

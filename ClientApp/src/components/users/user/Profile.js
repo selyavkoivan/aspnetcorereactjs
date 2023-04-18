@@ -1,34 +1,65 @@
-﻿import React from 'react';
+﻿import React, {useState, useEffect} from 'react';
 import {Container, Row, Col, CardImg, Button, Badge} from 'reactstrap';
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {StudentCourses} from "./StudentCourses";
+import {EditProfile} from "./EditProfile";
+
+import { ToastContainer, toast } from 'react-toastify';
+import ReactHtmlParser from 'html-react-parser';
+import 'react-toastify/dist/ReactToastify.css';
 
 export class Profile extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            user: {},
+            userData: {},
+            student: {},
             isUser: false,
-            isLoaded: false
+            isStudent: false
         };
     }
 
     componentDidMount() {
-        fetch('/users' + window.location.pathname, {method: 'GET'})
-            .then(response => {
-                this.setState({isLoaded: true})
-                if (response.status === 200) {
-                    this.setState({isUser: true})
-                }
-                return response.json();
+        fetch('/api/users' + window.location.pathname, {method: 'GET'})
+            .then(response => response.json())
+            .then(data => {
+                this.GetStudent(data.user);
+                this.setState({userData: data, isUser: true})
+            });
+    }
+
+    GetStudent(user) {
+        fetch('/api/students/' + user.userName + '/isStudent', {method: 'GET'})
+            .then(response => response.json())
+            .then(data => {
+                this.setState({isStudent: data})
+            });
+    }
+
+    handleEdit = (event) => {
+        this.setState({isEdit: true})
+    }
+
+    toggleEdit = (e) => {
+        if (e !== undefined) { // проверяем содержит ли параметр e текст
+            toast.success(e, {
+                position: 'top-right',
+                autoClose: 10000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
             })
-            .then(data => this.setState({user: data}));
+        }
+        this.setState(prevState => ({ isEdit: !prevState.isEdit }));
     }
 
     render() {
-        const {user, isUser, isLoaded} = this.state;
-        if (isLoaded && isUser) {
+        const {userData, isUser, isStudent, isEdit} = this.state;
+        if (isUser) {
             return (
                 <Container className="mt-5">
                     <Row>
@@ -36,47 +67,29 @@ export class Profile extends React.Component {
                             <CardImg src="https://avatars.githubusercontent.com/u/12345?v=4"
                                      className="rounded-circle"
                                      fluid/>
-                            <h1 className="mt-3">Селявко Иван</h1>
-                            <h6 className="text-muted">{user.email}</h6>
+                            <div>
+                                <h1 className="mt-3 text-wrap" style={{wordBreak: 'break-word'}}>
+                                    {userData.user.surname} {userData.user.name}
+                                </h1>
+                                <h6 className="text-muted">{userData.user.email}</h6>
+                            </div>
                             <hr/>
-                            <p className="text-muted">ИЭФ ИСиТ(Э) 972304</p>
-                            <hr/>
-                            <Button variant="primary"><FontAwesomeIcon icon={faPenToSquare}/> Изменить</Button>
+                            {isEdit ? null : (
+                                <Button variant="primary" onClick={this.handleEdit}>
+                                <FontAwesomeIcon icon={faPenToSquare}/> Изменить</Button>
+                            )}
                         </Col>
                         <Col md={9}>
-                            <h2>Мои курсы</h2>
-                            <hr/>
-                            <Row>
-                                <Col md={6} className="mb-3">
-                                    <div className="form-control">
-                                        <h3>СТОЭИ ч. 2</h3>
-                                        <p>Современные технологии обработки экономической информации.</p>
-                                        <Badge>Данные</Badge>{' '}
-                                        <Badge>Программирование</Badge>{' '}
-                                        <Badge>1с</Badge>{' '}
-                                        <Badge>Учет</Badge>{' '}
-                                    </div>
-                                </Col>
-                                <Col md={6} className="mb-3">
-                                    <div className="form-control">
-                                        <h3>МППиИУ</h3>
-                                        <p>Маркетинг программных продуктов и ИТ-услуг</p>
-                                        <Badge>Маркетинг</Badge>{' '}
-                                        <Badge>Экономика</Badge>{' '}
-                                        <Badge>IT</Badge>{' '}
-                                    </div>
-                                </Col>
-                                <Col md={6} className="mb-3">
-                                    <div className="form-control">
-                                        <h3>Маркетинг</h3>
-                                        <p>Маркетинг</p>
-                                        <Badge>Маркетинг</Badge>{' '}
-                                        <Badge>Экономика</Badge>{' '}
-                                    </div>
-                                </Col>
-                            </Row>
+                            <ToastContainer />
+                            {isEdit ? (
+                                <EditProfile toggleEdit={this.toggleEdit}/>
+                            ) : (
+                                isStudent ? (
+                                    <StudentCourses/>
+                                ) : null
+                            )}
                         </Col>
-                    </Row>
+                    < /Row>
                 </Container>
             );
         }

@@ -4,6 +4,7 @@ using DistanceLearningSystem.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,31 +12,21 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DistanceLearningSystem.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230404132652_fixCource1")]
+    partial class fixCource1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CourseStudent", b =>
-                {
-                    b.Property<int>("CoursesCourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentsStudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CoursesCourseId", "StudentsStudentId");
-
-                    b.HasIndex("StudentsStudentId");
-
-                    b.ToTable("CourseStudent", (string)null);
-                });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Course", b =>
                 {
@@ -55,48 +46,7 @@ namespace DistanceLearningSystem.Migrations
 
                     b.HasKey("CourseId");
 
-                    b.ToTable("Courses", (string)null);
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Tag", b =>
-                {
-                    b.Property<int>("TagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"));
-
-                    b.Property<int?>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TagName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TagId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Tags", (string)null);
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Student", b =>
-                {
-                    b.Property<int>("StudentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"));
-
-                    b.Property<string>("StudentInfoId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("StudentId");
-
-                    b.HasIndex("StudentInfoId");
-
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.UserManagement.User", b =>
@@ -109,6 +59,10 @@ namespace DistanceLearningSystem.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -125,9 +79,6 @@ namespace DistanceLearningSystem.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NewEmail")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
@@ -163,6 +114,9 @@ namespace DistanceLearningSystem.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int?>("userInfoId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -174,6 +128,10 @@ namespace DistanceLearningSystem.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -309,37 +267,14 @@ namespace DistanceLearningSystem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CourseStudent", b =>
-                {
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Course", null)
-                        .WithMany()
-                        .HasForeignKey("CoursesCourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsStudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Tag", b =>
-                {
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Course", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("CourseId");
-                });
-
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Student", b =>
                 {
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.User", "StudentInfo")
-                        .WithMany()
-                        .HasForeignKey("StudentInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasBaseType("DistanceLearningSystem.Models.DistanceLearning.UserManagement.User");
 
-                    b.Navigation("StudentInfo");
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -391,11 +326,6 @@ namespace DistanceLearningSystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Course", b =>
-                {
-                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

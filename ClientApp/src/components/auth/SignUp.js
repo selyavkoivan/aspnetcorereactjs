@@ -30,7 +30,7 @@ export class SignUp extends React.Component {
 
     handleSubmit(event) {
         
-        fetch('auth/signup', {
+        fetch('/api/auth/signup', {
             method: 'POST',
             body: JSON.stringify({
                 Email: this.state.Email,

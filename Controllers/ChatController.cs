@@ -5,13 +5,13 @@ using Microsoft.Extensions.Localization;
 using DistanceLearningSystem.Context;
 using DistanceLearningSystem.Models;
 using DistanceLearningSystem.Models.Chat.openai;
-using DistanceLearningSystem.Models.User;
+using DistanceLearningSystem.Models.DistanceLearning.UserManagement;
 using Microsoft.EntityFrameworkCore;
 
 namespace DistanceLearningSystem.Controllers
 {
     [ApiController]
-    [Route("chat")]
+    [Route("api/chat")]
     public class ChatController : ControllerBase
     {
         private readonly ApplicationContext _context;

@@ -1,7 +1,5 @@
 ﻿using DistanceLearningSystem.Models.DistanceLearning;
 using DistanceLearningSystem.Models.DistanceLearning.UserManagement;
-using DistanceLearningSystem.Models.User;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,18 +10,14 @@ namespace DistanceLearningSystem.Context
         public override DbSet<User> Users => Set<User>();
         public DbSet<Student> Students => Set<Student>();
         public DbSet<Course> Courses => Set<Course>();
-
+        public DbSet<Tag> Tags => Set<Tag>();
+        
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options) => Database.EnsureCreated();
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-            optionsBuilder.UseLazyLoadingProxies();
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-                
             /*builder.Entity<User>().HasOne(u => u.UserInfo)
                 .WithOne(ui => ui.User)
                 .HasForeignKey<User>(u => u.userInfoId)
