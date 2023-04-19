@@ -49,9 +49,9 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> EditUser(string userName, [FromBody] UserDto userDto)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName);
-        user!.UpdateFromDto(userDto);
-        await _userManager.UpdateAsync(user);
-        return Ok(await GetUserWithRoles(user.UserName!));
+        user?.UpdateFromDto(userDto);
+        await _userManager.UpdateAsync(user!);
+        return Ok(await GetUserWithRoles(user!.UserName!));
     }
 
     [HttpPut]
@@ -59,12 +59,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> EditEmail(string userName, [FromBody] UserDto userDto)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName);
-        user!.UpdateEmailFromDto(userDto);
-        await _userManager.UpdateAsync(user);
+        user?.UpdateEmailFromDto(userDto);
+        await _userManager.UpdateAsync(user!);
 
-        SendEmail(user);
+        SendEmail(user!);
         
-        return Ok(await GetUserWithRoles(user.UserName!));
+        return Ok(await GetUserWithRoles(user!.UserName!));
     }
 
     [HttpPut]

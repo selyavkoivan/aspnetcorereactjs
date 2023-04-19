@@ -89,11 +89,11 @@ export class NavMenu extends Component {
                                     className="text-dark ms-2"
                                 />
                             </DropdownToggle>
-                            <DropdownMenu right>
+                            <DropdownMenu>
                                 <DropdownItem href={`profile/${this.state.userData.user.userName}`}>Профиль</DropdownItem>
                                 <DropdownItem href={`search`}>Пользователи</DropdownItem>
                                 <DropdownItem onClick={() => {
-                                    fetch('/auth/logout', {method: 'POST'})
+                                    fetch('/api/auth/logout', {method: 'POST'})
                                         .then(response => window.location.replace(""))
                                 }}>Выйти</DropdownItem>
                             </DropdownMenu>

@@ -2,17 +2,33 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTimes, faMagnifyingGlass, faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {Badge} from "reactstrap";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 export class InputCourse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             course: {
-                tags: []
+                tags: [],
             },
-            tagName: null
+            tagName: null,
+            isLoaded: false,
+            isDeleteModalOpen: false,
         };
+
     }
+
+    componentDidMount() {
+        const {editMode} = this.props;
+        if (editMode) {
+            fetch('/api' + window.location.pathname, {method: 'GET'})
+                .then((response) => response.json())
+                .then((data) => {
+                    this.setState({course: data, isLoaded: true});
+                });
+        }
+    }
+
 
     onChangeCourseName = event => {
         this.setState(prevState => ({
@@ -50,17 +66,48 @@ export class InputCourse extends React.Component {
     }
 
     handleSave = _ => {
+        const {editMode} = this.props;
         fetch("/api/courses/course", {
-            method: 'POST',
+            method: editMode ? 'PUT' : 'POST',
             body: JSON.stringify(this.state.course),
             headers: {"Content-Type": "application/json"}
+        }).then(response => response.json()).then(data => {
+            window.location.replace('/courses/' + data)
         })
     }
 
+    handleToggleModal = _ => {
+        this.setState(prevState => ({
+            isDeleteModalOpen: !prevState.isDeleteModalOpen
+        }))
+    };
+
+    handleDelete = (courseName) => {
+        const {course} = this.state
+        if (courseName === course.courseName) {
+            this.handleToggleModal();
+            fetch('/api/courses/course', {
+                method: 'DELETE',
+                body: JSON.stringify(this.state.course),
+                headers: {"Content-Type": "application/json"}
+            }).then(response => {
+                if(response.status === 200) {
+                    window.location.replace('/courses')
+                }
+            })
+        }
+    };
+
+
     render() {
-        const {course, tagName} = this.state;
+        const {course, tagName, isDeleteModalOpen} = this.state;
         return (
             <div className="row m-0 ps-3 align-items-center justify-content-center">
+                {isDeleteModalOpen ? (
+                    <DeleteConfirmationModal onDelete={this.handleDelete} isOpen={isDeleteModalOpen}
+                                             toggle={this.handleToggleModal}/>
+                ) : null}
+
                 <div className="p-2 col-8">
                     <h2 className="mb-3">ККККККККК к</h2>
                     <div className="input-group">
@@ -111,14 +158,15 @@ export class InputCourse extends React.Component {
                         <button className="btn btn-primary me-2"
                                 onClick={this.handleSave}>Сохранить
                         </button>
-                        <button className="btn btn-outline-danger">Отмена
+                        <button className="btn btn-secondary me-2">Отмена
+                        </button>
+                        <button onClick={this.handleToggleModal} className="btn btn-danger"
+                        >Удалить
                         </button>
                     </div>
                 </div>
             </div>
-
         )
-
     }
 }
                 

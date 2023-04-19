@@ -48,7 +48,7 @@ public class StudentController : ControllerBase
     {
         var course = await _context.Courses.FindAsync(courseId);
         var student = await GetStudentData(userName);
-        student!.Courses.Add(course!);
+        student?.Courses.Add(course!);
         await _context.SaveChangesAsync();
         await AssignStudentRole(student.StudentInfo);
         return Ok(student);
@@ -87,7 +87,7 @@ public class StudentController : ControllerBase
     }
 
     private async Task<object?> GetStudentWithRoles(string username) => await _context.Students
-        .Include(st => st.Courses)!.ThenInclude(cr => cr.Tags)
+        .Include(st => st.Courses)?.ThenInclude(cr => cr.Tags)
         .Include(st => st.StudentInfo)
         .FirstOrDefaultAsync(ur => ur.StudentInfo.UserName == username);
 

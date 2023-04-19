@@ -11,5 +11,7 @@ public class Course
     
     [JsonIgnore]
     public virtual List<Student>? Students { get; set; }
+    
+    
     public virtual List<Tag>? Tags { get; set; }
 }

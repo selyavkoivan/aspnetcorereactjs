@@ -26,14 +26,42 @@ public class CoursesController : ControllerBase
     {
         await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
-        return Ok();
+        return Ok(course.CourseId);
     }
-    
+
     [HttpPut("course")]
     public async Task<IActionResult> EditCourse(Course course)
     {
+        var existingCourse = await _context.Courses
+            .Include(c => c.Tags)
+            .AsNoTracking().FirstOrDefaultAsync(c => c.CourseId == course.CourseId);
+
+        var tagsToDelete = existingCourse?.Tags?
+            .Where(t => course.Tags!.All(ct => ct.TagId != t.TagId))
+            .ToList();
+
+        _context.Tags.RemoveRange(tagsToDelete);
         _context.Courses.Update(course);
         await _context.SaveChangesAsync();
+
+        return Ok(course.CourseId);
+    }
+    
+    [HttpDelete("course")]
+    public async Task<IActionResult> DeleteCourse(Course course)
+    {
+        var existingCourse = await _context.Courses
+            .Include(c => c.Tags)
+            .AsNoTracking().FirstOrDefaultAsync(c => c.CourseId == course.CourseId);
+
+        if (existingCourse?.Tags?.Count > 0)
+        {
+            _context.Tags.RemoveRange(existingCourse?.Tags!);
+        }
+        
+        _context.Courses.Remove(course);
+        await _context.SaveChangesAsync();
+
         return Ok();
     }
 
@@ -48,7 +76,7 @@ public class CoursesController : ControllerBase
             .Where(cr => cr.CourseName.Contains(searchTerm) || cr.CourseDescription.Contains(searchTerm))
             .ToListAsync());
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> SearchCourses(int id)
     {
