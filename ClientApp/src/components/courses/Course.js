@@ -45,11 +45,20 @@ export class Course extends React.Component {
 
     handleGetCourse = _ => {
         const {course} = this.state
-        fetch('/api/students/me/enroll/' + course.courseId, {method: 'POST'})
+        fetch('/api/students/me/subscribe/' + course.courseId, {method: 'POST'})
             .then((response) => response.json())
             .then((data) => {  
                 window.location.replace('/profile/' + data.studentInfo.userName)
             });
+    }
+
+    handleUnsubCourse = _ => {
+        const {course} = this.state
+        fetch('/api/students/me/unsubscribe/' + course.courseId, {method: 'POST'})
+            .then((response) => response.json())
+            .then((data) => {
+                window.location.replace('/profile/' + data.studentInfo.userName)
+            })
     }
 
     render() {
@@ -74,6 +83,11 @@ export class Course extends React.Component {
                                     {isSignIn && !isCourse ? (
                                         <button className="btn btn-secondary" onClick={this.handleGetCourse}>
                                             Подписаться на курс
+                                        </button>
+                                    ) : null}
+                                    {isSignIn && isCourse ? (
+                                        <button className="btn btn-secondary" onClick={this.handleUnsubCourse}>
+                                            Отписаться от курса
                                         </button>
                                     ) : null}
                                 </div>

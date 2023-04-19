@@ -43,8 +43,8 @@ public class StudentController : ControllerBase
     public async Task<IActionResult> GetStudent(string userName) =>
         Ok(await GetStudentWithRoles(userName));
 
-    [HttpPost("{userName}/enroll/{courseId}")]
-    public async Task<IActionResult> EnrollCourseForStudent(string userName, int courseId)
+    [HttpPost("{userName}/subscribe/{courseId}")]
+    public async Task<IActionResult> SubscribeStudentToCourse(string userName, int courseId)
     {
         var course = await _context.Courses.FindAsync(courseId);
         var student = await GetStudentData(userName);
@@ -54,14 +54,26 @@ public class StudentController : ControllerBase
         return Ok(student);
     }
     
-    [HttpPost("me/enroll/{courseId}")]
-    public async Task<IActionResult> EnrollCourseForMe(int courseId)
+    [HttpPost("me/subscribe/{courseId}")]
+    public async Task<IActionResult> SubscribeToCourse(int courseId)
     {
         var course = await _context.Courses.FindAsync(courseId);
         var student = await GetStudentData(_userManager.GetUserAsync(HttpContext.User).Result.UserName);
         student?.Courses.Add(course!);
         await _context.SaveChangesAsync();
         await AssignStudentRole(student.StudentInfo);
+        return Ok(student);
+    }
+    
+    [HttpPost("me/unsubscribe/{courseId}")]
+    public async Task<IActionResult> UnubscribeFromCourse(int courseId)
+    {
+        var course = await _context.Courses.FindAsync(courseId);
+        var student = await GetStudentData(_userManager.GetUserAsync(HttpContext.User).Result.UserName);
+        
+        student.Courses.Remove(course);
+        await _context.SaveChangesAsync();
+        
         return Ok(student);
     }
     
