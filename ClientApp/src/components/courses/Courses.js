@@ -82,13 +82,15 @@ export class Courses extends React.Component {
                                 <hr/>
                                 <div className="row mt-4">
                                     {courses.map(course => (
-                                        <CourseCard
+                                        <Col md={6} className="mb-3">
+                                            <CourseCard
                                             key={course.courseId}
                                             courseId={course.courseId}
                                             courseName={course.courseName}
                                             courseDescription={course.courseDescription}
                                             tags={course.tags}
                                         />
+                                        </Col>
                                     ))}
 
                                     <Col md={6} className="mb-3">

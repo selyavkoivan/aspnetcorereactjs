@@ -9,7 +9,9 @@ export class Course extends React.Component {
         this.state = {
             course: {},
             isLoaded: false,
-            isEditMode: false
+            isEditMode: false,
+            isSignIn: false,
+            isCourse: true
         };
         this.handleEditClick = this.handleEditClick.bind(this);
     }
@@ -19,15 +21,39 @@ export class Course extends React.Component {
             .then((response) => response.json())
             .then((data) => {
                 this.setState({course: data, isLoaded: true});
+                fetch('/api/students/me/' + data.courseId + '/isCourse', {method: 'GET'})
+                    .then((response) => response.json())
+                    .then((data) => {
+                        this.setState({isCourse: data});
+                    });
+            });
+
+        fetch('/api/users/me', {method: 'GET'})
+            .then((response) => response.json())
+            .then((data) => {
+                fetch('/api/students/' + data.user.userName + '/isStudent', {method: 'GET'})
+                    .then((response) => response.json())
+                    .then((data) => {
+                        this.setState({isSignIn: data});
+                    });
             });
     }
 
-    handleEditClick() {
+    handleEditClick = _ => {
         this.setState({isEditMode: true});
     }
 
+    handleGetCourse = _ => {
+        const {course} = this.state
+        fetch('/api/students/me/enroll/' + course.courseId, {method: 'POST'})
+            .then((response) => response.json())
+            .then((data) => {  
+                window.location.replace('/profile/' + data.studentInfo.userName)
+            });
+    }
+
     render() {
-        const {course, isLoaded, isEditMode} = this.state;
+        const {course, isLoaded, isEditMode, isSignIn, isCourse} = this.state;
         if (isLoaded) {
             const tagData = course.tags.map((tag) => ({
                 value: tag.tagName,
@@ -43,8 +69,13 @@ export class Course extends React.Component {
                                 <div className="col-8">
                                     <h3>{course.courseName}</h3>
                                     <p>{course.courseDescription}</p>
-                                    <button className="btn btn-secondary" onClick={this.handleEditClick}>Изменить
+                                    <button className="btn btn-secondary me-2" onClick={this.handleEditClick}>Изменить
                                     </button>
+                                    {isSignIn && !isCourse ? (
+                                        <button className="btn btn-secondary" onClick={this.handleGetCourse}>
+                                            Подписаться на курс
+                                        </button>
+                                    ) : null}
                                 </div>
                                 <div className="col-4">
                                     <div

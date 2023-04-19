@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
     [HttpGet("me")]
     public async Task<IActionResult> GetCurrentUser()
     {
-        return Ok(await GetUserWithRoles(_userManager.GetUserAsync(HttpContext.User).Result.UserName));
+        return Ok(await GetUserWithRoles(_userManager.GetUserAsync(HttpContext.User).Result!.UserName!));
     }
 
     [HttpGet]

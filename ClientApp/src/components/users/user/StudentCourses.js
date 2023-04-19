@@ -30,16 +30,18 @@ export class StudentCourses extends React.Component {
                     <h2>Мои курсы</h2>
                     <hr/>
                     {student.courses.length !== 0 ? (
-                        <Col md={9}>
+                        <Col md={12}>
                             <Row>
                                 {student.courses.map(course => (
-                                    <CourseCard
+                                    <Col md={4} className="mb-3">
+                                        <CourseCard
                                         key={course.courseId}
                                         courseId={course.courseId}
                                         courseName={course.courseName}
                                         courseDescription={course.courseDescription}
                                         tags={course.tags}
                                     />
+                                    </Col>
                                 ))}
                             </Row>
                         </Col>

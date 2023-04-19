@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {StudentCourses} from "./StudentCourses";
 import {EditProfile} from "./EditProfile";
 
-import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
 import ReactHtmlParser from 'html-react-parser';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -54,7 +54,7 @@ export class Profile extends React.Component {
                 progress: undefined,
             })
         }
-        this.setState(prevState => ({ isEdit: !prevState.isEdit }));
+        this.setState(prevState => ({isEdit: !prevState.isEdit}));
     }
 
     render() {
@@ -76,11 +76,11 @@ export class Profile extends React.Component {
                             <hr/>
                             {isEdit ? null : (
                                 <Button variant="primary" onClick={this.handleEdit}>
-                                <FontAwesomeIcon icon={faPenToSquare}/> Изменить</Button>
+                                    <FontAwesomeIcon icon={faPenToSquare}/> Изменить</Button>
                             )}
                         </Col>
                         <Col md={9}>
-                            <ToastContainer />
+                            <ToastContainer/>
                             {isEdit ? (
                                 <EditProfile toggleEdit={this.toggleEdit}/>
                             ) : (

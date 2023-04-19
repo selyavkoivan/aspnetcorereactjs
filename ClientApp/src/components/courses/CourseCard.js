@@ -2,7 +2,7 @@
 
 export function CourseCard(props) {
     return (
-        <Col md={6} className="mb-3">
+        <>
             <a className="form-control pb-2 text-decoration-none text-dark"
                href={`/courses/${props.courseId}`}>
                 <h3 style={{
@@ -25,6 +25,6 @@ export function CourseCard(props) {
           </span>
                 ))}
             </a>
-        </Col>
+        </>
     );
 }

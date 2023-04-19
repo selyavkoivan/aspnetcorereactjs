@@ -53,6 +53,24 @@ public class StudentController : ControllerBase
         await AssignStudentRole(student.StudentInfo);
         return Ok(student);
     }
+    
+    [HttpPost("me/enroll/{courseId}")]
+    public async Task<IActionResult> EnrollCourseForMe(int courseId)
+    {
+        var course = await _context.Courses.FindAsync(courseId);
+        var student = await GetStudentData(_userManager.GetUserAsync(HttpContext.User).Result.UserName);
+        student?.Courses.Add(course!);
+        await _context.SaveChangesAsync();
+        await AssignStudentRole(student.StudentInfo);
+        return Ok(student);
+    }
+    
+    [HttpGet("me/{courseId}/isCourse")]
+    public async Task<IActionResult> GetIsCourseForMe(int courseId)
+    {
+        var student = await GetStudentData(_userManager.GetUserAsync(HttpContext.User).Result.UserName);
+        return Ok(student.Courses.Any(cr => cr.CourseId == courseId));
+    }
 
     [HttpPost("{userName}/assign")]
     public async Task<IActionResult> AssignStudentRole(string userName)
@@ -87,7 +105,7 @@ public class StudentController : ControllerBase
     }
 
     private async Task<object?> GetStudentWithRoles(string username) => await _context.Students
-        .Include(st => st.Courses)?.ThenInclude(cr => cr.Tags)
+        .Include(st => st.Courses)!.ThenInclude(cr => cr.Tags)
         .Include(st => st.StudentInfo)
         .FirstOrDefaultAsync(ur => ur.StudentInfo.UserName == username);
 
