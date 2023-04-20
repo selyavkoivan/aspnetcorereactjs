@@ -73,6 +73,7 @@ public class CoursesController : ControllerBase
     public async Task<IActionResult> SearchCourses(string searchTerm)
     {
         return Ok(await _context.Courses.Include(cr => cr.Tags)
+            .Include(cr => cr.Sections).ThenInclude(sc => sc.Lessons)
             .Where(cr => cr.CourseName.Contains(searchTerm) || cr.CourseDescription.Contains(searchTerm))
             .ToListAsync());
     }
@@ -81,6 +82,7 @@ public class CoursesController : ControllerBase
     public async Task<IActionResult> SearchCourses(int id)
     {
         return Ok(await _context.Courses.Include(cr => cr.Tags)
+            .Include(cr => cr.Sections).ThenInclude(sc => sc.Lessons)
             .FirstOrDefaultAsync(cr => cr.CourseId == id));
     }
 

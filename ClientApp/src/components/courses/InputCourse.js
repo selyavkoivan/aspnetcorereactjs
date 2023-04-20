@@ -84,7 +84,7 @@ export class InputCourse extends React.Component {
 
     handleDelete = (courseName) => {
         const {course} = this.state
-        
+
         if (courseName === course.courseName) {
             this.handleToggleModal();
             fetch('/api/courses/course', {
@@ -92,7 +92,7 @@ export class InputCourse extends React.Component {
                 body: JSON.stringify(this.state.course),
                 headers: {"Content-Type": "application/json"}
             }).then(response => {
-                if(response.status === 200) {
+                if (response.status === 200) {
                     window.location.replace('/courses')
                 }
             })
@@ -101,10 +101,9 @@ export class InputCourse extends React.Component {
 
     handleCancel = _ => {
         const {editMode} = this.props
-        if(editMode) {
+        if (editMode) {
             this.props.cancel()
-        }
-        else {
+        } else {
             window.location.replace('/courses')
         }
     }
@@ -112,11 +111,13 @@ export class InputCourse extends React.Component {
 
     render() {
         const {course, tagName, isDeleteModalOpen} = this.state;
+        const {editMode} = this.props;
         return (
+
             <div className="row m-0 ps-3 align-items-center justify-content-center">
-                {isDeleteModalOpen ? (
-                    <DeleteConfirmationModal onDelete={this.handleDelete} isOpen={isDeleteModalOpen}
-                                             toggle={this.handleToggleModal}/>
+                {isDeleteModalOpen && editMode ? (
+                    <DeleteConfirmationModal targetClassName={'курса'} onDelete={this.handleDelete}
+                                             isOpen={isDeleteModalOpen} toggle={this.handleToggleModal}/>
                 ) : null}
 
                 <div className="p-2 col-8">
@@ -171,9 +172,10 @@ export class InputCourse extends React.Component {
                         </button>
                         <button className="btn btn-secondary me-2" onClick={this.handleCancel}>Отмена
                         </button>
-                        <button onClick={this.handleToggleModal} className="btn btn-danger"
-                        >Удалить
-                        </button>
+                        {editMode ? (
+                            <button onClick={this.handleToggleModal} className="btn btn-danger"
+                            >Удалить
+                            </button>) : null}
                     </div>
                 </div>
             </div>

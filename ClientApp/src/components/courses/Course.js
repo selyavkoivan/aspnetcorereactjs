@@ -2,6 +2,7 @@
 import {TagCloud} from 'react-tagcloud';
 import './Course.css';
 import {InputCourse} from "./InputCourse";
+import {InputSection} from "./InputSection";
 
 export class Course extends React.Component {
     constructor(props) {
@@ -11,7 +12,9 @@ export class Course extends React.Component {
             isLoaded: false,
             isEditMode: false,
             isSignIn: false,
-            isCourse: true
+            isCourse: true,
+            inputSectionMode: false,
+            sectionEditId: 0
         };
     }
 
@@ -39,7 +42,7 @@ export class Course extends React.Component {
     }
 
     toggleEditMode = _ => {
-        this.setState(prevState => ({ isEditMode: !prevState.isEditMode }));
+        this.setState(prevState => ({isEditMode: !prevState.isEditMode}));
     }
 
 
@@ -47,7 +50,7 @@ export class Course extends React.Component {
         const {course} = this.state
         fetch('/api/students/me/subscribe/' + course.courseId, {method: 'POST'})
             .then((response) => response.json())
-            .then((data) => {  
+            .then((data) => {
                 window.location.replace('/profile/' + data.studentInfo.userName)
             });
     }
@@ -61,8 +64,19 @@ export class Course extends React.Component {
             })
     }
 
+    toggleInputSectionAdd = _ => {
+
+        this.setState({sectionEditId: null})
+        this.setState(prevState => ({inputSectionMode: !prevState.inputSectionMode}));
+    }
+
+    toggleInputSectionEdit = sectionId => {
+        this.setState({sectionEditId: sectionId})
+        this.setState(prevState => ({inputSectionMode: !prevState.inputSectionMode}));
+    }
+
     render() {
-        const {course, isLoaded, isEditMode, isSignIn, isCourse} = this.state;
+        const {course, isLoaded, isEditMode, isSignIn, isCourse, inputSectionMode, sectionEditId} = this.state;
         if (isLoaded) {
             const tagData = course.tags.map((tag) => ({
                 value: tag.tagName,
@@ -81,13 +95,18 @@ export class Course extends React.Component {
                                     <button className="btn btn-secondary me-2" onClick={this.toggleEditMode}>Изменить
                                     </button>
                                     {isSignIn && !isCourse ? (
-                                        <button className="btn btn-secondary" onClick={this.handleGetCourse}>
+                                        <button className="btn btn-secondary me-2" onClick={this.handleGetCourse}>
                                             Подписаться на курс
                                         </button>
                                     ) : null}
                                     {isSignIn && isCourse ? (
-                                        <button className="btn btn-secondary" onClick={this.handleUnsubCourse}>
+                                        <button className="btn btn-secondary me-2" onClick={this.handleUnsubCourse}>
                                             Отписаться от курса
+                                        </button>
+                                    ) : null}
+                                    {!inputSectionMode ? (
+                                        <button className="btn btn-secondary me-2" onClick={this.toggleInputSectionAdd}>
+                                            Добавить раздел
                                         </button>
                                     ) : null}
                                 </div>
@@ -111,22 +130,35 @@ export class Course extends React.Component {
                                 </div>
                                 <hr className="mt-3"/>
                             </div>
-                            <div className="row col-12">
-                                <div className="col-8">
-                                    <div className="form-control">
-                                        тут будет курс
+                            {inputSectionMode ? (
+                                <InputSection cancel={this.toggleInputSectionAdd}
+                                              sectionId={this.state.sectionEditId ? this.state.sectionEditId : null}/>
+                            ) : (
+                                <div className="row col-12">
+                                    <div className="col-8">
+                                        <div className="form-control">
+                                            {course.sections.map(section => (
+                                                <div>
+                                                    {section.sectionName}
+                                                    <button className="btn btn-secondary me-2"
+                                                            onClick={() => this.toggleInputSectionEdit(section.sectionId)}>
+                                                        Изменить раздел
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-4">
-                                    <div className="form-control">
-                                        тут будет содержание
+                                    <div className="col-4">
+                                        <div className="form-control">
+                                            тут будет содержание
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                </div>)}
                         </div>
                     </div>
                 );
             }
+
         }
     }
 }

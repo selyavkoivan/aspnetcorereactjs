@@ -11,7 +11,7 @@ export class Courses extends React.Component {
         this.state = {
             courses: [],
             isLoaded: false,
-            searchTerm: ""
+            searchTerm: "",
         };
     }
 

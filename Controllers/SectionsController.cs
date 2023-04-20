@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DistanceLearningSystem.Controllers;
 
 [ApiController]
-[Route("api/courses/{courseId}/sections/")]
+[Route("api/courses/{courseId}/sections")]
 public class SectionsController : ControllerBase
 {
     private readonly ApplicationContext _context;
@@ -58,5 +58,12 @@ public class SectionsController : ControllerBase
         _context.Sections.Remove(section);
         await _context.SaveChangesAsync();
         return Ok();
+    }
+    
+    [HttpGet("{sectionId}")]
+    public async Task<IActionResult> GetCourseSection(int sectionId)
+    {
+        var sections = await _context.Sections.FindAsync(sectionId);
+        return Ok(sections);
     }
 }

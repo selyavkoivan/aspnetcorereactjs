@@ -11,5 +11,5 @@ public class Section
     
     [JsonIgnore]
     public Course? Course { get; set; }
-    public List<Lesson> Lessons { get; set; }
+    public List<Lesson>? Lessons { get; set; }
 }
