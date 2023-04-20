@@ -12,7 +12,8 @@ namespace DistanceLearningSystem.Context
         public DbSet<Course> Courses => Set<Course>();
         public DbSet<Tag> Tags => Set<Tag>();
         public DbSet<Section> Sections => Set<Section>();
-        
+        public DbSet<Lesson> Lessons => Set<Lesson>();
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options) => Database.EnsureCreated();
 
