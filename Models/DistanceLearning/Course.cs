@@ -14,4 +14,5 @@ public class Course
     
     
     public virtual List<Tag>? Tags { get; set; }
+    public virtual List<Section>? Sections { get; set; }
 }

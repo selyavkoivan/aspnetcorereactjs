@@ -46,7 +46,7 @@ public class CoursesController : ControllerBase
 
         return Ok(course.CourseId);
     }
-    
+
     [HttpDelete("course")]
     public async Task<IActionResult> DeleteCourse(Course course)
     {
@@ -58,7 +58,7 @@ public class CoursesController : ControllerBase
         {
             _context.Tags.RemoveRange(existingCourse?.Tags!);
         }
-        
+
         _context.Courses.Remove(course);
         await _context.SaveChangesAsync();
 
@@ -82,5 +82,11 @@ public class CoursesController : ControllerBase
     {
         return Ok(await _context.Courses.Include(cr => cr.Tags)
             .FirstOrDefaultAsync(cr => cr.CourseId == id));
+    }
+
+    [HttpGet("tags")]
+    public async Task<IActionResult> GetTags()
+    {
+        return Ok(await _context.Tags.SelectMany(t => t.TagName).Distinct().ToListAsync());
     }
 }

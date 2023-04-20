@@ -1,6 +1,6 @@
 ﻿import React, {useState, useEffect} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTimes, faMagnifyingGlass, faPenToSquare} from "@fortawesome/free-solid-svg-icons";
+import {faTimes, faMagnifyingGlass, faPenToSquare, faPlusCircle, faCheck} from "@fortawesome/free-solid-svg-icons";
 import {Badge} from "reactstrap";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
@@ -84,6 +84,7 @@ export class InputCourse extends React.Component {
 
     handleDelete = (courseName) => {
         const {course} = this.state
+        
         if (courseName === course.courseName) {
             this.handleToggleModal();
             fetch('/api/courses/course', {
@@ -97,6 +98,16 @@ export class InputCourse extends React.Component {
             })
         }
     };
+
+    handleCancel = _ => {
+        const {editMode} = this.props
+        if(editMode) {
+            this.props.cancel()
+        }
+        else {
+            window.location.replace('/courses')
+        }
+    }
 
 
     render() {
@@ -138,7 +149,7 @@ export class InputCourse extends React.Component {
                                onChange={this.onChangeTag}
                                aria-describedby="coursename-addon"/>
                         <button id="search" className="btn btn-success" onClick={this.handleAddTag}>
-                            <FontAwesomeIcon icon={faMagnifyingGlass}/>
+                            <FontAwesomeIcon icon={faCheck}/>
                         </button>
                     </div>
                     <div className="mt-3">
@@ -158,7 +169,7 @@ export class InputCourse extends React.Component {
                         <button className="btn btn-primary me-2"
                                 onClick={this.handleSave}>Сохранить
                         </button>
-                        <button className="btn btn-secondary me-2">Отмена
+                        <button className="btn btn-secondary me-2" onClick={this.handleCancel}>Отмена
                         </button>
                         <button onClick={this.handleToggleModal} className="btn btn-danger"
                         >Удалить

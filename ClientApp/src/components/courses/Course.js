@@ -13,7 +13,6 @@ export class Course extends React.Component {
             isSignIn: false,
             isCourse: true
         };
-        this.handleEditClick = this.handleEditClick.bind(this);
     }
 
     componentDidMount() {
@@ -39,9 +38,10 @@ export class Course extends React.Component {
             });
     }
 
-    handleEditClick = _ => {
-        this.setState({isEditMode: true});
+    toggleEditMode = _ => {
+        this.setState(prevState => ({ isEditMode: !prevState.isEditMode }));
     }
+
 
     handleGetCourse = _ => {
         const {course} = this.state
@@ -69,7 +69,7 @@ export class Course extends React.Component {
                 count: Math.floor(Math.random() * 10) + 1
             }));
             if (isEditMode) {
-                return <InputCourse course={course} editMode={true}/>
+                return <InputCourse cancel={this.toggleEditMode} course={course} editMode={true}/>
             } else {
                 return (
                     <div className="row m-0 ps-3 align-items-center justify-content-center">
@@ -78,7 +78,7 @@ export class Course extends React.Component {
                                 <div className="col-8">
                                     <h3>{course.courseName}</h3>
                                     <p>{course.courseDescription}</p>
-                                    <button className="btn btn-secondary me-2" onClick={this.handleEditClick}>Изменить
+                                    <button className="btn btn-secondary me-2" onClick={this.toggleEditMode}>Изменить
                                     </button>
                                     {isSignIn && !isCourse ? (
                                         <button className="btn btn-secondary" onClick={this.handleGetCourse}>
