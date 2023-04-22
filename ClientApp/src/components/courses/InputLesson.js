@@ -4,56 +4,58 @@ import {faTimes, faMagnifyingGlass, faPenToSquare, faPlusCircle, faCheck} from "
 import {Badge} from "reactstrap";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
-export class InputSection extends React.Component {
+export class InputLesson extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            section: {},
+            lesson: {},
             tagName: null,
             isLoaded: false,
             isDeleteModalOpen: false,
-            constSectionName: null
+            constLessonName: null
         };
 
     }
 
     componentDidMount() {
-        const {sectionId} = this.props;
+        const {sectionId, lessonId} = this.props;
         if (sectionId) {
-            fetch('/api' + window.location.pathname + '/sections/' + sectionId, {method: 'GET'})
+            fetch('/api/sections/' + sectionId + '/lessons/' + lessonId, {method: 'GET'})
                 .then((response) => response.json())
                 .then((data) => {
-                    this.setState({section: data, isLoaded: true, constSectionName: data.sectionName});
+                    this.setState({lesson: data, isLoaded: true, constLessonName: data.lessonName});
                 });
         }
     }
 
 
-    onChangeSectionName = event => {
+    onChangeLessonName = event => {
         this.setState(prevState => ({
-            section: {
-                ...prevState.section,
-                sectionName: event.target.value
+            lesson: {
+                ...prevState.lesson,
+                lessonName: event.target.value
             }
         }));
     }
 
-    onChangeSectionDescription = event => {
+    onChangeLessonDescription = event => {
         this.setState(prevState => ({
-            section: {
-                ...prevState.section,
-                sectionDescription: event.target.value
+            lesson: {
+                ...prevState.lesson,
+                lessonDescription: event.target.value
             }
         }));
     }
 
     handleSave = _ => { 
-        const {sectionId} = this.props;
-        fetch("/api" + window.location.pathname + '/sections', {
-            method: sectionId ? 'PUT' : 'POST',
-            body: JSON.stringify(this.state.section),
+        const {lessonId, sectionId} = this.props;
+        const {lesson} = this.state;
+        
+        fetch('/api/sections/' + sectionId + '/lessons', {
+            method: lessonId ? 'PUT' : 'POST',
+            body: JSON.stringify(lesson),
             headers: {"Content-Type": "application/json"}
-        }).then(_ => window.location.reload())
+        }).then(_  => window.location.reload())
     }
 
     handleToggleModal = _ => {
@@ -62,14 +64,15 @@ export class InputSection extends React.Component {
         }))
     };
 
-    handleDelete = (sectionName) => {
-        const {section, constSectionName} = this.state
+    handleDelete = (lessonName) => {
+        const {lessonId, sectionId} = this.props;
+        const {lesson, constLessonName} = this.state;
 
-        if (sectionName === constSectionName) {
+        if (lessonName === constLessonName) {
             this.handleToggleModal();
-            fetch("/api" + window.location.pathname + '/sections', {
+            fetch('/api/sections/' + sectionId + '/lessons',  {
                 method: 'DELETE',
-                body: JSON.stringify(this.state.section),
+                body: JSON.stringify(lesson),
                 headers: {"Content-Type": "application/json"}
             }).then(response => {
                 if(response.status === 200) {
@@ -84,32 +87,32 @@ export class InputSection extends React.Component {
     }
     
     render() {
-        const {section, isDeleteModalOpen} = this.state;
-        const {sectionId} = this.props;
+        const {lesson, isDeleteModalOpen} = this.state;
+        const {lessonId} = this.props;
         return (
             <div className="row m-0 ps-3 align-items-center justify-content-center">
-                {isDeleteModalOpen && sectionId ? (
-                    <DeleteConfirmationModal targetClassName={'раздела'} onDelete={this.handleDelete}
+                {isDeleteModalOpen && lessonId ? (
+                    <DeleteConfirmationModal targetClassName={'занятия'} onDelete={this.handleDelete}
                                              isOpen={isDeleteModalOpen} toggle={this.handleToggleModal}/>
                 ) : null}
                 <div className="p-2 col-12">
-                    <h2 className="mb-3">Ввод данных раздела</h2>
+                    <h2 className="mb-3">Ввод данных урока</h2>
                     <div className="input-group">
                         <div className="input-group-prepend">
                             <span className="input-group-text" id="coursename-addon">@</span>
                         </div>
                         <input id="coursename" required type="text" className="form-control"
-                               placeholder="Название раздела"
-                               aria-label="Название раздела"
-                               value={section.sectionName}
-                               onChange={this.onChangeSectionName}
+                               placeholder="Тема урока"
+                               aria-label="Тема урока"
+                               value={lesson.lessonName}
+                               onChange={this.onChangeLessonName}
                                aria-describedby="coursename-addon"/>
                     </div>
                     <div className="form-group mt-3">
-                        <label htmlFor="courseDescription">Описание раздела</label>
+                        <label htmlFor="courseDescription">Краткое описание темы урока</label>
                         <textarea className="form-control" id="courseDescription" rows="3"
-                                  value={section.sectionDescription}
-                                  onChange={this.onChangeSectionDescription}/>
+                                  value={lesson.lessonDescription}
+                                  onChange={this.onChangeLessonDescription}/>
                     </div>
                     <div className="d-flex justify-content-end mt-3">
                         <button className="btn btn-primary me-2"
@@ -117,7 +120,7 @@ export class InputSection extends React.Component {
                         </button>
                         <button className="btn btn-secondary me-2" onClick={this.handleCancel}>Отмена
                         </button>
-                        {sectionId ? (
+                        {lessonId ? (
                             <button onClick={this.handleToggleModal} className="btn btn-danger"
                             >Удалить
                             </button>) : null}

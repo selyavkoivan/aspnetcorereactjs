@@ -3,6 +3,9 @@ import {TagCloud} from 'react-tagcloud';
 import './Course.css';
 import {InputCourse} from "./InputCourse";
 import {InputSection} from "./InputSection";
+import {Button, Card, CardBody, CardHeader, Collapse} from "reactstrap";
+import {SectionComponent} from "./SectionComponent";
+import {InputLesson} from "./InputLesson";
 
 export class Course extends React.Component {
     constructor(props) {
@@ -75,8 +78,21 @@ export class Course extends React.Component {
         this.setState(prevState => ({inputSectionMode: !prevState.inputSectionMode}));
     }
 
+    toggleInputLesson = (sectionId, lessonId) => {
+        this.setState({sectionEditId: sectionId ? sectionId : 0})
+        this.setState({lessonEditId: lessonId ? lessonId : null})
+        this.setState(prevState => ({inputLessonMode: !prevState.inputLessonMode}));
+    }
+
+    toggleCollapse = () => {
+        this.setState({collapse: !this.state.collapse});
+    }
+
     render() {
-        const {course, isLoaded, isEditMode, isSignIn, isCourse, inputSectionMode, sectionEditId} = this.state;
+        const {
+            course, isLoaded, isEditMode, isSignIn, isCourse, inputSectionMode, sectionEditId,
+            inputLessonMode
+        } = this.state;
         if (isLoaded) {
             const tagData = course.tags.map((tag) => ({
                 value: tag.tagName,
@@ -130,30 +146,34 @@ export class Course extends React.Component {
                                 </div>
                                 <hr className="mt-3"/>
                             </div>
-                            {inputSectionMode ? (
-                                <InputSection cancel={this.toggleInputSectionAdd}
-                                              sectionId={this.state.sectionEditId ? this.state.sectionEditId : null}/>
-                            ) : (
-                                <div className="row col-12">
-                                    <div className="col-8">
-                                        <div className="form-control">
-                                            {course.sections.map(section => (
-                                                <div>
-                                                    {section.sectionName}
-                                                    <button className="btn btn-secondary me-2"
-                                                            onClick={() => this.toggleInputSectionEdit(section.sectionId)}>
-                                                        Изменить раздел
-                                                    </button>
+                            {inputLessonMode ?
+                                (
+                                    <InputLesson cancel={this.toggleInputLesson}  sectionId={sectionEditId}
+                                                 lessonId={this.state.lessonEditId ? this.state.lessonEditId : null}/>)
+                                : (
+                                    <>
+                                        {inputSectionMode ? (
+                                            <InputSection cancel={this.toggleInputSectionAdd}
+                                                          sectionId={this.state.sectionEditId ? this.state.sectionEditId : null}/>
+                                        ) : (
+                                            <div className="row col-12">
+                                                <div className="col-8">
+                                                    {course.sections.map(section => (
+                                                        <SectionComponent section={section}
+                                                                          toggleInputSectionEdit={_ => {
+                                                                              this.toggleInputSectionEdit(section.sectionId)
+                                                                          }}
+                                                                          toggleInputLesson={this.toggleInputLesson}/>
+                                                    ))}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="col-4">
-                                        <div className="form-control">
-                                            тут будет содержание
-                                        </div>
-                                    </div>
-                                </div>)}
+                                                <div className="col-4">
+                                                    <div className="form-control">
+                                                        тут будет содержание
+                                                    </div>
+                                                </div>
+                                            </div>)}
+                                    </>
+                                )}
                         </div>
                     </div>
                 );

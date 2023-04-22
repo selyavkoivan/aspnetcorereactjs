@@ -14,6 +14,7 @@ export class InputCourse extends React.Component {
             tagName: null,
             isLoaded: false,
             isDeleteModalOpen: false,
+            constCourseName: null
         };
 
     }
@@ -24,7 +25,7 @@ export class InputCourse extends React.Component {
             fetch('/api' + window.location.pathname, {method: 'GET'})
                 .then((response) => response.json())
                 .then((data) => {
-                    this.setState({course: data, isLoaded: true});
+                    this.setState({course: data, isLoaded: true, constCourseName: data.courseName});
                 });
         }
     }
@@ -83,9 +84,9 @@ export class InputCourse extends React.Component {
     };
 
     handleDelete = (courseName) => {
-        const {course} = this.state
+        const {course, constCourseName} = this.state
 
-        if (courseName === course.courseName) {
+        if (courseName === constCourseName) {
             this.handleToggleModal();
             fetch('/api/courses/course', {
                 method: 'DELETE',

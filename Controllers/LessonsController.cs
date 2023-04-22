@@ -42,7 +42,6 @@ public class LessonsController : ControllerBase
     [HttpPut("")]
     public async Task<IActionResult> EditLesson(Lesson lesson)
     {
-        
         _context.Update(lesson);
         await _context.SaveChangesAsync();
         
@@ -55,5 +54,12 @@ public class LessonsController : ControllerBase
         _context.Lessons.Remove(lesson);
         await _context.SaveChangesAsync();
         return Ok();
+    }
+    
+    [HttpGet("{lessonId}")]
+    public async Task<IActionResult> GetCourseSection(int lessonId)
+    {
+        var lesson = await _context.Lessons.FindAsync(lessonId);
+        return Ok(lesson);
     }
 }

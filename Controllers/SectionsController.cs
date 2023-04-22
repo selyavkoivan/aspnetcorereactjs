@@ -25,7 +25,7 @@ public class SectionsController : ControllerBase
     public async Task<IActionResult> GetCourseSections(int courseId)
     {
         var sections = await _context.Sections.Include(sc => sc.Course)
-            .Where(sc => sc.Course.CourseId == courseId).ToListAsync();
+            .Include(sc => sc.Lessons).Where(sc => sc.Course.CourseId == courseId).ToListAsync();
         return Ok(sections);
     }
     
@@ -63,7 +63,8 @@ public class SectionsController : ControllerBase
     [HttpGet("{sectionId}")]
     public async Task<IActionResult> GetCourseSection(int sectionId)
     {
-        var sections = await _context.Sections.FindAsync(sectionId);
+        var sections = await _context.Sections.Include(sc => sc.Lessons)
+            .FirstOrDefaultAsync(sc => sc.SectionId == sectionId);
         return Ok(sections);
     }
 }
