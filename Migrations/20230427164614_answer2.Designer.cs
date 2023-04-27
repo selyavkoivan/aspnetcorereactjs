@@ -4,6 +4,7 @@ using DistanceLearningSystem.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DistanceLearningSystem.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230427164614_answer2")]
+    partial class answer2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,21 +38,6 @@ namespace DistanceLearningSystem.Migrations
                     b.HasIndex("StudentsStudentId");
 
                     b.ToTable("CourseStudent");
-                });
-
-            modelBuilder.Entity("CourseTeacher", b =>
-                {
-                    b.Property<int>("CoursesCourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeachersTeacherId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CoursesCourseId", "TeachersTeacherId");
-
-                    b.HasIndex("TeachersTeacherId");
-
-                    b.ToTable("CourseTeacher");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.Chat.Message", b =>
@@ -138,12 +126,6 @@ namespace DistanceLearningSystem.Migrations
                     b.Property<int?>("AnswerId1")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LessonId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LessonId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("PathToFile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -153,10 +135,6 @@ namespace DistanceLearningSystem.Migrations
                     b.HasIndex("AnswerId");
 
                     b.HasIndex("AnswerId1");
-
-                    b.HasIndex("LessonId");
-
-                    b.HasIndex("LessonId1");
 
                     b.ToTable("AttachedFiles");
                 });
@@ -177,7 +155,12 @@ namespace DistanceLearningSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
                     b.HasKey("CourseId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Courses");
                 });
@@ -524,21 +507,6 @@ namespace DistanceLearningSystem.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CourseTeacher", b =>
-                {
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Course", null)
-                        .WithMany()
-                        .HasForeignKey("CoursesCourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersTeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DistanceLearningSystem.Models.Chat.Message", b =>
                 {
                     b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.User", "From")
@@ -590,14 +558,13 @@ namespace DistanceLearningSystem.Migrations
                     b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Answer", null)
                         .WithMany("TeacherAttachedFiles")
                         .HasForeignKey("AnswerId1");
+                });
 
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Lesson", null)
-                        .WithMany("Homework")
-                        .HasForeignKey("LessonId");
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Lesson", null)
-                        .WithMany("StudyMaterials")
-                        .HasForeignKey("LessonId1");
+            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Course", b =>
+                {
+                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Teacher", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Lesson", b =>
@@ -712,16 +679,14 @@ namespace DistanceLearningSystem.Migrations
                     b.Navigation("Tags");
                 });
 
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Lesson", b =>
-                {
-                    b.Navigation("Homework");
-
-                    b.Navigation("StudyMaterials");
-                });
-
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Section", b =>
                 {
                     b.Navigation("Lessons");
+                });
+
+            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Teacher", b =>
+                {
+                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

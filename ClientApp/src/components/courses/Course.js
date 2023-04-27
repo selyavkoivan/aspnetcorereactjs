@@ -6,6 +6,7 @@ import {InputSection} from "./InputSection";
 import {Button, Card, CardBody, CardHeader, Collapse} from "reactstrap";
 import {SectionComponent} from "./SectionComponent";
 import {InputLesson} from "./InputLesson";
+import {CourseSections} from "./CourseSections";
 
 export class Course extends React.Component {
     constructor(props) {
@@ -148,7 +149,7 @@ export class Course extends React.Component {
                             </div>
                             {inputLessonMode ?
                                 (
-                                    <InputLesson cancel={this.toggleInputLesson}  sectionId={sectionEditId}
+                                    <InputLesson cancel={this.toggleInputLesson} sectionId={sectionEditId}
                                                  lessonId={this.state.lessonEditId ? this.state.lessonEditId : null}/>)
                                 : (
                                     <>
@@ -167,9 +168,7 @@ export class Course extends React.Component {
                                                     ))}
                                                 </div>
                                                 <div className="col-4">
-                                                    <div className="form-control">
-                                                        тут будет содержание
-                                                    </div>
+                                                    <CourseSections course={course}/>
                                                 </div>
                                             </div>)}
                                     </>

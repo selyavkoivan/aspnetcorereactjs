@@ -10,4 +10,7 @@ public class Lesson
 
     [JsonIgnore]
     public Section? Section { get; set; }
+
+    public List<AttachedFile>? StudyMaterials { get; set; }
+    public List<AttachedFile>? Homework { get; set; }
 }

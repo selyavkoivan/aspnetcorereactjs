@@ -20,7 +20,7 @@ export class InputLesson extends React.Component {
     componentDidMount() {
         const {sectionId, lessonId} = this.props;
         if (sectionId) {
-            fetch('/api/sections/' + sectionId + '/lessons/' + lessonId, {method: 'GET'})
+            fetch('/api/lessons/' + lessonId, {method: 'GET'})
                 .then((response) => response.json())
                 .then((data) => {
                     this.setState({lesson: data, isLoaded: true, constLessonName: data.lessonName});
@@ -50,8 +50,7 @@ export class InputLesson extends React.Component {
     handleSave = _ => { 
         const {lessonId, sectionId} = this.props;
         const {lesson} = this.state;
-        
-        fetch('/api/sections/' + sectionId + '/lessons', {
+        fetch('/api/lessons' + (lessonId ? '' : ('/sections/' + sectionId)), {
             method: lessonId ? 'PUT' : 'POST',
             body: JSON.stringify(lesson),
             headers: {"Content-Type": "application/json"}
@@ -70,7 +69,7 @@ export class InputLesson extends React.Component {
 
         if (lessonName === constLessonName) {
             this.handleToggleModal();
-            fetch('/api/sections/' + sectionId + '/lessons',  {
+            fetch('/api/lessons/' + lessonId,  {
                 method: 'DELETE',
                 body: JSON.stringify(lesson),
                 headers: {"Content-Type": "application/json"}

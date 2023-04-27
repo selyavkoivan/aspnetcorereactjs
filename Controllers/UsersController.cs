@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using DistanceLearningSystem.Context;
+using DistanceLearningSystem.Controllers.Services.CloudinaryService;
 using DistanceLearningSystem.Controllers.Services.EmailServices;
 using DistanceLearningSystem.Models.DistanceLearning.UserManagement;
 using DistanceLearningSystem.Models.Email;
@@ -83,6 +84,19 @@ public class UsersController : ControllerBase
         {
             return BadRequest();
         }
+    }
+    
+    [HttpPost("profile/{userName}/upload")]
+    public async Task<IActionResult> UploadAvatar(IFormFile file, string userName)
+    {
+        var result = await CloudinaryUploader.UploadAsync(file);
+
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        user.AvatarUrl = result.Url.AbsoluteUri;
+
+        await _userManager.UpdateAsync(user);
+        
+        return Ok();
     }
     
     private async void SendEmail(User user)

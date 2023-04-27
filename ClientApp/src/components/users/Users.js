@@ -33,7 +33,7 @@ export class Users extends React.Component {
                                         <div className="p-2">
                                             <a href={'/profile/' + userRole.user.userName}>
                                                 <img alt="" className="col-12 img img-responsive rounded-circle"
-                                                     src="https://irisphoto.art/web/image/76796/22-3-404-Maximilian.jpg"/></a>
+                                                     src={userRole.user.avatarUrl}/></a>
                                         </div>
                                         <div className="col-12 m-0">
                                             <a className="text-decoration-none text-reset"

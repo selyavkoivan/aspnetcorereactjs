@@ -101,6 +101,20 @@ export class EditProfile extends React.Component {
         this.setState(prevState => ({editPassword: !prevState.editPassword}));
     }
 
+    handleUpload = () => {
+        const fileInput = document.querySelector('#file');
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        fetch('/api/users' + window.location.pathname + '/upload', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            window.location.reload()
+        })
+    }
+
+
     render() {
         const {user, isLoaded, editEmail, editPassword} = this.state;
         if (isLoaded) {
@@ -153,7 +167,7 @@ export class EditProfile extends React.Component {
                                                 icon={faCloudUpload}/> Выберите или перетащите фото ...
                                         </label>
                                         <input type="file" id="file" name="file" className="d-none"
-                                               accept="image/*"/>
+                                               accept="image/*" onChange={this.handleUpload}/>
                                     </div>
                                 </div>
                             </div>

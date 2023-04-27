@@ -64,8 +64,8 @@ export class Profile extends React.Component {
                 <Container className="mt-5">
                     <Row>
                         <Col md={3}>
-                            <CardImg src="https://avatars.githubusercontent.com/u/12345?v=4"
-                                     className="rounded-circle"
+                            <CardImg src={userData.user.avatarUrl}
+                                     className=""
                                      fluid/>
                             <div>
                                 <h1 className="mt-3 text-wrap" style={{wordBreak: 'break-word'}}>

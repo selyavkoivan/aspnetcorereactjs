@@ -77,7 +77,7 @@ export class NavMenu extends Component {
                     {isLogin ? (
                         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
                             <DropdownToggle caret style={{background: 'none', border: 'none'}}>
-                                <img src="https://avatars.githubusercontent.com/u/12345?v=4"
+                                <img src={this.state.userData.user.avatarUrl}
                                      alt="avatar"
                                      width="40"
                                      height="40"

@@ -56,6 +56,10 @@ const AppRoutes = [
   {
     path: '/courses/*',
     element: <Course />
+  },
+  {
+    path: '/lesson',
+    element: <Course />
   }
 ];
 

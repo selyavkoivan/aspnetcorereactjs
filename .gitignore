@@ -235,3 +235,4 @@ Models/User/ConstUserData.cs
 Models/Chat/openai/OpenAIApiKey.cs
 /.idea
 /appsettings.json
+/Models/Cloudinary/CloudinaryValues.cs

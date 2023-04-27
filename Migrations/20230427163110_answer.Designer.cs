@@ -4,6 +4,7 @@ using DistanceLearningSystem.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DistanceLearningSystem.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230427163110_answer")]
+    partial class answer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,130 +38,6 @@ namespace DistanceLearningSystem.Migrations
                     b.HasIndex("StudentsStudentId");
 
                     b.ToTable("CourseStudent");
-                });
-
-            modelBuilder.Entity("CourseTeacher", b =>
-                {
-                    b.Property<int>("CoursesCourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeachersTeacherId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CoursesCourseId", "TeachersTeacherId");
-
-                    b.HasIndex("TeachersTeacherId");
-
-                    b.ToTable("CourseTeacher");
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.Chat.Message", b =>
-                {
-                    b.Property<int>("MessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageId"));
-
-                    b.Property<string>("FromId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("MessageBody")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ToId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("MessageId");
-
-                    b.HasIndex("FromId");
-
-                    b.HasIndex("ToId");
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Answer", b =>
-                {
-                    b.Property<int>("AnswerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnswerId"));
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LessonId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentComment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TeacherComment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("AnswerId");
-
-                    b.HasIndex("LessonId");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("Answers");
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.AttachedFile", b =>
-                {
-                    b.Property<int>("AttachedFileId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttachedFileId"));
-
-                    b.Property<int?>("AnswerId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AnswerId1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LessonId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LessonId1")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PathToFile")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AttachedFileId");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("AnswerId1");
-
-                    b.HasIndex("LessonId");
-
-                    b.HasIndex("LessonId1");
-
-                    b.ToTable("AttachedFiles");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Course", b =>
@@ -273,25 +152,6 @@ namespace DistanceLearningSystem.Migrations
                     b.HasIndex("StudentInfoId");
 
                     b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Teacher", b =>
-                {
-                    b.Property<int>("TeacherId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherId"));
-
-                    b.Property<string>("TeacherInfoId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("TeacherId");
-
-                    b.HasIndex("TeacherInfoId");
-
-                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.UserManagement.User", b =>
@@ -524,82 +384,6 @@ namespace DistanceLearningSystem.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CourseTeacher", b =>
-                {
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Course", null)
-                        .WithMany()
-                        .HasForeignKey("CoursesCourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersTeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.Chat.Message", b =>
-                {
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.User", "From")
-                        .WithMany()
-                        .HasForeignKey("FromId");
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.User", "To")
-                        .WithMany()
-                        .HasForeignKey("ToId");
-
-                    b.Navigation("From");
-
-                    b.Navigation("To");
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Answer", b =>
-                {
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Lesson", "Lesson")
-                        .WithMany()
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Teacher", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Lesson");
-
-                    b.Navigation("Student");
-
-                    b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.AttachedFile", b =>
-                {
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Answer", null)
-                        .WithMany("AttachedFiles")
-                        .HasForeignKey("AnswerId");
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Answer", null)
-                        .WithMany("TeacherAttachedFiles")
-                        .HasForeignKey("AnswerId1");
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Lesson", null)
-                        .WithMany("Homework")
-                        .HasForeignKey("LessonId");
-
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Lesson", null)
-                        .WithMany("StudyMaterials")
-                        .HasForeignKey("LessonId1");
-                });
-
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Lesson", b =>
                 {
                     b.HasOne("DistanceLearningSystem.Models.DistanceLearning.Section", "Section")
@@ -634,17 +418,6 @@ namespace DistanceLearningSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("StudentInfo");
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.UserManagement.Teacher", b =>
-                {
-                    b.HasOne("DistanceLearningSystem.Models.DistanceLearning.UserManagement.User", "TeacherInfo")
-                        .WithMany()
-                        .HasForeignKey("TeacherInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TeacherInfo");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -698,25 +471,11 @@ namespace DistanceLearningSystem.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Answer", b =>
-                {
-                    b.Navigation("AttachedFiles");
-
-                    b.Navigation("TeacherAttachedFiles");
-                });
-
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Course", b =>
                 {
                     b.Navigation("Sections");
 
                     b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Lesson", b =>
-                {
-                    b.Navigation("Homework");
-
-                    b.Navigation("StudyMaterials");
                 });
 
             modelBuilder.Entity("DistanceLearningSystem.Models.DistanceLearning.Section", b =>
